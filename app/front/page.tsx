@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useCallback, useEffect } from "react";
 import { Connection, PublicKey, clusterApiUrl, Transaction, SystemProgram } from "@solana/web3.js";
@@ -8,11 +8,13 @@ import {
   ConnectionProvider
 } from "@solana/wallet-adapter-react";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
+import { SolletWalletAdapter } from "@solana/wallet-adapter-sollet"; // Import Sollet wallet adapter
+import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare"; 
 import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 import '@solana/wallet-adapter-react-ui/styles.css';
 
-const network = clusterApiUrl('devnet'); // Use 'mainnet-beta' for real transactions
+const network = clusterApiUrl('devnet'); // Use 'mainnet-beta' for real transactions 
 const connection = new Connection(network);
 
 const Home = () => {
@@ -69,11 +71,11 @@ const Home = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-      <h1 className="text-4xl font-bold mb-6">Connect to Phantom Wallet</h1>
+      <h1 className="text-4xl font-bold mb-6">Connect Your Wallet</h1>
 
       {/* Wallet Connection Button */}
       <WalletMultiButton className="bg-purple-600 text-white px-4 py-2 rounded-md mb-4">
-        {wallet.connected ? 'Wallet Connected' : 'Connect Wallet'}
+        {wallet.connected ? 'Wallet Connected  ' : 'Connect Wallet'}
       </WalletMultiButton>
 
       {/* Input for SOL Amount */}
@@ -91,20 +93,25 @@ const Home = () => {
 
       {/* Send SOL Button */}
       <div>
-      <button
-        onClick={sendSol}
-        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:cursor-pointer"
-        disabled={!wallet.connected || solAmount <= 0}
-      >
-        Send SOL
-      </button>
+        <button
+          onClick={sendSol}
+          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:cursor-pointer"
+          disabled={!wallet.connected || solAmount <= 0}
+        >
+          Send SOL
+        </button>
       </div>
     </div>
   );
 };
 
 const App = () => {
-  const wallets = [new PhantomWalletAdapter()];
+  // Add multiple wallet adapters
+  const wallets = [
+    new PhantomWalletAdapter(),
+    new SolletWalletAdapter(), // Add Sollet wallet
+    new SolflareWalletAdapter() // Add Solflare wallet
+  ];
 
   return (
     <ConnectionProvider endpoint={network}>
